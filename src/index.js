@@ -2,11 +2,14 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import './index.css'
+import App from './components/app'
+import ImageService from './services/image-service'
+import SwapiService from './services/swapi-service'
 
-const App = ()=>{
-    return<h1>Trial page</h1>
-}
+const swapiService = new SwapiService()
+const imageSevice = new ImageService()
 
-
-ReactDOM.render(<App />, document.getElementById('root'))
+ReactDOM.render(
+    <App swapiService={swapiService} imageSevice={imageSevice} />
+    , document.getElementById('root'))
 
