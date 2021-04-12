@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const path = require('path')
 
 module.exports = (env, argv) => {
 
@@ -13,6 +14,10 @@ module.exports = (env, argv) => {
     }
 
     return {
+        output: {
+            path: path.resolve(__dirname, 'root'),
+            filename: 'index.js',
+        },
         mode: "development",
         devServer: {
             open: true
