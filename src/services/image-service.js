@@ -1,4 +1,4 @@
-export default class CarouselService {
+export default class ImageService {
     data = [
         {
             id: 1,
@@ -22,10 +22,10 @@ export default class CarouselService {
         }
     ]
 
-    fetchCarouselData() {
+    getImages = () => {
         return new Promise((resolve) => {
             setTimeout(() => { resolve(this.data) },
-            1000)
+                1000)
         })
     }
 }

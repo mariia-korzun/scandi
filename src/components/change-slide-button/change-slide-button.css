@@ -1,4 +1,12 @@
-.change-slide-button{
+.change-slide-button {
     height: 50px;
-    width: 100px;
+    width: 50px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    position: absolute;
+    z-index: 999;
+    top:50%;
+    transform: translate(0,-50%);
 }
+

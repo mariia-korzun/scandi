@@ -1,0 +1,32 @@
+.person {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    background-color: rgb(171, 200, 163);
+    font-family: 'Anton', sans-serif;
+    padding: 10px 20px;
+}
+
+.person-name {
+    color: rgb(26, 45, 26);
+    font-size: 2rem;
+    margin: 10px 0;
+}
+
+.person-img {
+    width: 150px;
+    height: auto;
+    border-radius: 5px;
+}
+
+.info-container {
+    display: flex;
+    justify-content: space-between;
+    color: rgb(26, 45, 26);
+}
+
+.info-list p{
+    text-align: center;
+
+}

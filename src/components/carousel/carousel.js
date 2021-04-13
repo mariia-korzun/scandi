@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
 
+import Slide from '../slide'
 import ChangeSlideButton from '../change-slide-button'
 import SliderDot from '../slider-dot'
 import './carousel.css'
 
-const Carousel = ({ data }) => {
+const Carousel = ({ data, contentComponent }) => {
     let TRANSITION_TIME = 0.3//transition
     let SHORT_TRANSITION_TIME = 0.1//shortTransition
     let MAX_SWIPE_TIME = 500//maxSwipeTime
@@ -202,12 +203,12 @@ const Carousel = ({ data }) => {
 
     }
 
-
+    let Content = contentComponent
 
     return (
-        <div>
+        <div className="carousel-container">
             <ChangeSlideButton
-                text='Prev'
+                isRight={false}
                 disabled={isButtonDisabled}
                 onClick={() => {
                     setDirection(false)
@@ -223,7 +224,7 @@ const Carousel = ({ data }) => {
 
                 }} />
             <ChangeSlideButton
-                text='Next'
+                isRight={true}
                 disabled={isButtonDisabled}
                 onClick={() => {
                     setDirection(true)
@@ -238,20 +239,20 @@ const Carousel = ({ data }) => {
                     }, TRANSITION_TIME * 1000)
                 }} />
 
-            <div className="carousel-container"
+            <div className="carousel"
                 onTouchStart={touchStartEvent => handleTouchStart(touchStartEvent)}
                 onTouchMove={touchMoveEvent => handleTouchMove(touchMoveEvent)}
                 onTouchEnd={() => handleTouchEnd()}>
 
-                <div className={`slide`} style={classes[0].style} >
-                    <img src={data[indexes[0].index].imgURL} className="slide-img" />
-                </div>
-                <div className={`slide`} style={classes[1].style} >
-                    <img src={data[indexes[1].index].imgURL} className="slide-img" />
-                </div>
-                <div className={`slide`} style={classes[2].style} >
-                    <img src={data[indexes[2].index].imgURL} className="slide-img" />
-                </div>
+                <Slide style={classes[0].style} slideData={data[indexes[0].index]}>
+                    <Content />
+                </Slide>
+                <Slide style={classes[1].style} slideData={data[indexes[1].index]}>
+                    <Content />
+                </Slide>
+                <Slide style={classes[2].style} slideData={data[indexes[2].index]}>
+                    <Content />
+                </Slide>
             </div>
             <SliderDot data={data} onChange={setSliderDotIndex} sliderDotIndex={sliderDotIndex} />
         </div>

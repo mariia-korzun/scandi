@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import LoadingIndicator from '../../'
+import LoadingIndicator from '../loading-indicator'
 
 
-const withData = (Wrapped) => {
+const withData = (fetch) => (Wrapped, contentComponent) => {
     return class extends Component {
         constructor() {
             super()
@@ -13,7 +13,7 @@ const withData = (Wrapped) => {
         }
 
         componentDidMount() {
-            this.props.fetch()
+            fetch()
                 .then(data => {
                     this.setState({
                         data,
@@ -25,7 +25,7 @@ const withData = (Wrapped) => {
         render() {
             const { loading, data } = this.state
             if (loading) { return (<LoadingIndicator />) }
-            return <Wrapped data={data} />
+            return <Wrapped data={data} contentComponent={contentComponent} />
         }
     }
 }

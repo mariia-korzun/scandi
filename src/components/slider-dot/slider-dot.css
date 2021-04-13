@@ -1,3 +1,4 @@
 .slider-dot{
     display: flex;
+    justify-content: center;
 }

@@ -17,6 +17,8 @@ module.exports = (env, argv) => {
             path: __dirname,
             filename: 'index.js',
         },
+        devtool: 'source-map',
+        
         mode: "development",
         devServer: {
             open: true
@@ -31,6 +33,17 @@ module.exports = (env, argv) => {
                 {
                     test: /\.(css)$/,
                     use: getStyleLoaders()
+                },
+                {
+                    test: /\.(png|jpg|jpeg|gif|ico')$/,
+                    use: [{
+                        loader: 'file-loader',
+                        options: {
+                            outputPath: 'images',
+                            name: '[name]-[sha1:hash:7].[ext]'
+                        }
+
+                    }]
                 }
             ]
         },

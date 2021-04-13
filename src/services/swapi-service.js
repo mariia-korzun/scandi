@@ -11,7 +11,7 @@ export default class SwapiService {
             return await res.json()
         }
 
-        this.getAllPeople = async () => {
+        this.getPeople = async () => {
             const res = await this.getResource(`/people/`)
             return res.results.map(this._transormPerson)
         }
@@ -23,7 +23,8 @@ export default class SwapiService {
                 name: person.name,
                 gender: person.gender,
                 birthYear: person.birth_year,
-                eyeColor: person.eye_color
+                eyeColor: person.eye_color,
+                getImgURL: this.getPersonImage
             }
         }
 
@@ -32,7 +33,7 @@ export default class SwapiService {
             return parseInt(item.url.match(idRegExp)[1])
         }
 
-        this.getPersonImage = ({ id }) => {
+        this.getPersonImage = (id) => {
             return `${this._imageBase}/characters/${id}.jpg`
         }
     }
