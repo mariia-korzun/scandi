@@ -254,7 +254,8 @@ const Carousel = ({ data, contentComponent }) => {
                     <Content />
                 </Slide>
             </div>
-            <SliderDot data={data} onChange={setSliderDotIndex} sliderDotIndex={sliderDotIndex} />
+            <SliderDot data={data} onChange={setSliderDotIndex} 
+             currentSlideIndex={currentSlideIndex} />
         </div>
     )
 }

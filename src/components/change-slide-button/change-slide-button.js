@@ -7,12 +7,12 @@ import right from '../../../public/images/right-arrow-icon.jpeg'
 
 const ChangeSlideButton = ({ onClick, isRight, disabled }) => {
     const img = isRight ? right : left
-    const width = 50
+    const width = 35
     const imgStyle = {
         width: `${width}px`
     }
     const style = {
-        left: isRight ? `100%` : '-50px',
+        left: isRight ? `100%` : `${-width}px`,
     }
     return (
         <button disabled={disabled}

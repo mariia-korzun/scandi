@@ -2,13 +2,13 @@ import React from 'react'
 
 import './slider-dot.css'
 
-const SliderDot = ({ data, onChange, sliderDotIndex }) => {
+const SliderDot = ({ data, onChange, currentSlideIndex }) => {
 
     return (
         <form className="slider-dot">
 
             {data.map((item, index) => {
-                let checked = sliderDotIndex === index
+                let checked = currentSlideIndex === index
                 return (
                     <input type="radio" key={item.id} checked={checked}
                         onChange={() => { onChange(index) }} />
