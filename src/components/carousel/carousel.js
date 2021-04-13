@@ -6,13 +6,13 @@ import SliderDot from '../slider-dot'
 import './carousel.css'
 
 const Carousel = ({ data, contentComponent }) => {
-    let TRANSITION_TIME = 0.3//transition
-    let SHORT_TRANSITION_TIME = 0.1//shortTransition
-    let MAX_SWIPE_TIME = 500//maxSwipeTime
-    let MAX_SHIFT = 100//maxShift
-    let PREV_SLIDE = -1//prevSlide
-    let CURRENT_SLIDE = 0//currentSlide
-    let NEXT_SLIDE = 1//nextSlide
+    const TRANSITION_TIME = 0.3
+    const SHORT_TRANSITION_TIME = 0.1
+    const MAX_SWIPE_TIME = 500
+    const MAX_SHIFT = 100
+    const PREV_SLIDE = -1
+    const CURRENT_SLIDE = 0
+    const NEXT_SLIDE = 1
 
     const getNewStyles = (shift, time, direction, changeOpacity = false) => {
         const transition = time ? `left ${time}s linear` : 'none'
@@ -92,15 +92,15 @@ const Carousel = ({ data, contentComponent }) => {
     let initialStyles = getNewStyles(0, TRANSITION_TIME, true)
     const [classes, setClasses] = useState([
         {
-            position: PREV_SLIDE,//prev
+            position: PREV_SLIDE,
             style: initialStyles.prev
         },
         {
-            position: CURRENT_SLIDE,//current
+            position: CURRENT_SLIDE,
             style: initialStyles.current
         },
         {
-            position: NEXT_SLIDE,//next
+            position: NEXT_SLIDE,
             style: initialStyles.next
         }
     ])
@@ -138,10 +138,14 @@ const Carousel = ({ data, contentComponent }) => {
         if (currentSlideIndex === sliderDotIndex) { return }
 
         let direction = (sliderDotIndex - currentSlideIndex) > 0
-        let newStyles = getNewStyles(0, SHORT_TRANSITION_TIME, direction)
-        let newClasses = getNewClassesArray(classes, newStyles)
-        setClasses(changeOrder(direction, newClasses))
-        setDirection(direction)
+
+        initiateSlideChange({
+            direction,
+            transition: SHORT_TRANSITION_TIME,
+            changeSlide: false,
+            updateDots: false
+        })
+
         setTimeout(() => {
             setChangeSlide(true)
         }, SHORT_TRANSITION_TIME * 1000)
@@ -174,40 +178,47 @@ const Carousel = ({ data, contentComponent }) => {
         })
     }
     function handleTouchMove(e) {
+
         let newShift = firstTouch.x - e.touches[0].clientX
         let newDirection = newShift >= 0
-        let newStyles = getNewStyles(newShift, null, newDirection, true)
-        let newClasses = getNewClassesArray(classes, newStyles)
-        setClasses(newClasses)
-        setDirection(newDirection)
-        setShift(newShift)
 
+        initiateSlideChange({
+            direction: newDirection,
+            shift: newShift,
+            transition: null,
+            changeOpacity: true,
+            isChangeOrder: false,
+            updateDots: false,
+            changeSlide: false
+        })
+        setShift(newShift)
     }
     function handleTouchEnd() {
         if (direction === null) { return }
         let swipeTime = Date.now() - firstTouch.time
 
         if ((Math.abs(shift) > MAX_SHIFT || swipeTime < MAX_SWIPE_TIME)) {
-            let newStyles = getNewStyles(0, TRANSITION_TIME, direction)
-            let newClasses = getNewClassesArray(classes, newStyles)
-            setDirection(direction)
-            setSliderDotEqualCurrentSlide(true)
-            setClasses(changeOrder(direction, newClasses))
-            setChangeSlide(true)
+
+            initiateSlideChange({ direction })
         }
         else {
-            let newStyles = getNewStyles(0, TRANSITION_TIME, direction, true)
-            let newClasses = getNewClassesArray(classes, newStyles)
-            setClasses(newClasses)
+            initiateSlideChange({
+                changeDirection: false,
+                direction,
+                changeOpacity: true,
+                isChangeOrder: false,
+                updateDots: false,
+                changeSlide: false
+            })
         }
 
     }
 
     let Content = contentComponent
 
-    function initiateSlideChange({ changeDirection = false, direction = true, shift = 0, classes, updateDots = true,
+    function initiateSlideChange({ changeDirection = true, direction = true, shift = 0, updateDots = true,
         isChangeOrder = true, changeSlide = true, transition = TRANSITION_TIME, changeOpacity = false
-    }) {
+    } = {}) {
         if (changeDirection) {
             setDirection(direction)
         }
@@ -216,6 +227,7 @@ const Carousel = ({ data, contentComponent }) => {
         setClasses(isChangeOrder ? changeOrder(direction, newClasses) : newClasses)
 
         if (updateDots) { setSliderDotEqualCurrentSlide(updateDots) }
+
         setChangeSlide(changeSlide)
 
     }
@@ -226,13 +238,9 @@ const Carousel = ({ data, contentComponent }) => {
                 isRight={false}
                 disabled={isButtonDisabled}
                 onClick={() => {
-                    setDirection(false)
-                    let newStyles = getNewStyles(0, TRANSITION_TIME, false)
-                    let newClasses = getNewClassesArray(classes, newStyles)
-                    setSliderDotEqualCurrentSlide(true)
-                    setClasses(changeOrder(false, newClasses))
+                    initiateSlideChange({ direction: false })
+
                     setIsButtonDisabled(true)
-                    setChangeSlide(true)
                     setTimeout(() => {
                         setIsButtonDisabled(false)
                     }, TRANSITION_TIME * 1000)
@@ -242,13 +250,9 @@ const Carousel = ({ data, contentComponent }) => {
                 isRight={true}
                 disabled={isButtonDisabled}
                 onClick={() => {
-                    setDirection(true)
-                    let newStyles = getNewStyles(0, TRANSITION_TIME, true)
-                    let newClasses = getNewClassesArray(classes, newStyles)
-                    setSliderDotEqualCurrentSlide(true)
-                    setClasses(changeOrder(true, newClasses))
+                    initiateSlideChange()
+
                     setIsButtonDisabled(true)
-                    setChangeSlide(true)
                     setTimeout(() => {
                         setIsButtonDisabled(false)
                     }, TRANSITION_TIME * 1000)
