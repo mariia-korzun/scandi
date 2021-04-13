@@ -18,10 +18,11 @@ module.exports = (env, argv) => {
             filename: 'index.js',
         },
         devtool: 'source-map',
-        
+
         mode: "development",
         devServer: {
-            open: true
+            open: true,
+            host: '0.0.0.0'
         },
         module: {
             rules: [
@@ -44,6 +45,17 @@ module.exports = (env, argv) => {
                         }
 
                     }]
+                },
+                {
+                    test: /\.svg$/,
+                    use: [
+                        {
+                            loader: 'svg-url-loader',
+                            options: {
+                                limit: 10000,
+                            },
+                        },
+                    ]
                 }
             ]
         },

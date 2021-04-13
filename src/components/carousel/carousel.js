@@ -205,6 +205,21 @@ const Carousel = ({ data, contentComponent }) => {
 
     let Content = contentComponent
 
+    function initiateSlideChange({ changeDirection = false, direction = true, shift = 0, classes, updateDots = true,
+        isChangeOrder = true, changeSlide = true, transition = TRANSITION_TIME, changeOpacity = false
+    }) {
+        if (changeDirection) {
+            setDirection(direction)
+        }
+        let newStyles = getNewStyles(shift, transition, direction, changeOpacity)
+        let newClasses = getNewClassesArray(classes, newStyles)
+        setClasses(isChangeOrder ? changeOrder(direction, newClasses) : newClasses)
+
+        if (updateDots) { setSliderDotEqualCurrentSlide(updateDots) }
+        setChangeSlide(changeSlide)
+
+    }
+
     return (
         <div className="carousel-container">
             <ChangeSlideButton
@@ -254,8 +269,8 @@ const Carousel = ({ data, contentComponent }) => {
                     <Content />
                 </Slide>
             </div>
-            <SliderDot data={data} onChange={setSliderDotIndex} 
-             currentSlideIndex={currentSlideIndex} />
+            <SliderDot data={data} onChange={setSliderDotIndex}
+                currentSlideIndex={currentSlideIndex} />
         </div>
     )
 }

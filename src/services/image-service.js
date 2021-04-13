@@ -2,23 +2,23 @@ export default class ImageService {
     data = [
         {
             id: 1,
-            imgURL: 'http://www.raskraska.ru/zifra_digital/img/one_cobalt_blue.gif'
+            imgURL: 'https://raw.githubusercontent.com/mariia-korzun/MockFiles/main/numbers/1.png'
         },
         {
             id: 2,
-            imgURL: 'http://www.raskraska.ru/zifra_digital/img/dva_cobalt_blue.gif'
+            imgURL: 'https://raw.githubusercontent.com/mariia-korzun/MockFiles/main/numbers/2.png'
         },
         {
             id: 3,
-            imgURL: 'http://www.raskraska.ru/zifra_digital/img/tri_cobalt_blue.gif'
+            imgURL: 'https://raw.githubusercontent.com/mariia-korzun/MockFiles/main/numbers/3.png'
         },
         {
             id: 4,
-            imgURL: 'http://www.raskraska.ru/zifra_digital/img/four_cobalt_blue.gif'
+            imgURL: 'https://raw.githubusercontent.com/mariia-korzun/MockFiles/main/numbers/4.png'
         },
         {
             id: 5,
-            imgURL: 'http://www.raskraska.ru/zifra_digital/img/five_cobalt_blue.gif'
+            imgURL: 'https://raw.githubusercontent.com/mariia-korzun/MockFiles/main/numbers/5.png'
         }
     ]
 
