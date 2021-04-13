@@ -4,7 +4,7 @@ import './loading-indicator.css'
 
 const LoadingIndicator = ()=>{
     return(
-        <h2>Loading...</h2>
+        <h2 className="loading-indicator">Loading...</h2>
     )
 }
 

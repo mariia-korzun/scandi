@@ -3,7 +3,6 @@ import React from 'react'
 import './slider-dot.css'
 
 const SliderDot = ({ data, onChange, currentSlideIndex }) => {
-
     return (
         <form className="slider-dot">
 
@@ -17,7 +16,6 @@ const SliderDot = ({ data, onChange, currentSlideIndex }) => {
             )}
 
         </form>
-
     )
 }
 

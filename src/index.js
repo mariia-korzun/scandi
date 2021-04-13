@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import './index.css'
 import App from './components/app'
 import ImageService from './services/image-service'
 import SwapiService from './services/swapi-service'

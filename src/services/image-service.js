@@ -1,4 +1,6 @@
 export default class ImageService {
+    delay = 700
+
     data = [
         {
             id: 1,
@@ -25,7 +27,7 @@ export default class ImageService {
     getImages = () => {
         return new Promise((resolve) => {
             setTimeout(() => { resolve(this.data) },
-                1000)
+                this.delay)
         })
     }
 }

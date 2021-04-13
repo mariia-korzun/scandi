@@ -16,7 +16,6 @@ const PersonComponent = ({ data }) => {
                     <p>{`Gender: ${data.gender}`}</p>
                     <p>{`Birthday: ${data.birthYear}`}</p>
                     <p>{`Eye Color: ${data.eyeColor}`}</p>
-
                 </div>
             </div>
         </div>

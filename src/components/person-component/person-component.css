@@ -4,7 +4,6 @@
     height: 100%;
     border-radius: 5px;
     background-color: rgb(171, 200, 163);
-    font-family: 'Anton', sans-serif;
     padding: 10px 20px;
 }
 
@@ -28,5 +27,4 @@
 
 .info-list p{
     text-align: center;
-
 }

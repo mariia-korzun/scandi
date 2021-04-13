@@ -5,7 +5,7 @@ import ChangeSlideButton from '../change-slide-button'
 import SliderDot from '../slider-dot'
 import './carousel.css'
 
-const Carousel = ({ data, contentComponent }) => {
+const Carousel = ({ data, contentComponent: Content }) => {
     const TRANSITION_TIME = 0.3
     const SHORT_TRANSITION_TIME = 0.1
     const MAX_SWIPE_TIME = 500
@@ -168,7 +168,7 @@ const Carousel = ({ data, contentComponent }) => {
         setIndexes(changeOrder(direction, newIndexesArray))
         setDirection(null)
         setChangeSlide(false)
-        
+
     }, [changeSlide])
 
     function handleTouchStart(e) {
@@ -214,11 +214,11 @@ const Carousel = ({ data, contentComponent }) => {
 
     }
 
-    let Content = contentComponent
 
-    function initiateSlideChange({ changeDirection = true, direction = true, shift = 0, updateDots = true,
-        isChangeOrder = true, changeSlide = true, transition = TRANSITION_TIME, changeOpacity = false
-    } = {}) {
+    function initiateSlideChange({ changeDirection = true, direction = true,
+        shift = 0, updateDots = true, isChangeOrder = true, changeSlide = true,
+        transition = TRANSITION_TIME, changeOpacity = false } = {}) {
+
         if (changeDirection) {
             setDirection(direction)
         }
@@ -229,7 +229,6 @@ const Carousel = ({ data, contentComponent }) => {
         if (updateDots) { setSliderDotEqualCurrentSlide(updateDots) }
 
         setChangeSlide(changeSlide)
-
     }
 
     return (
@@ -245,17 +244,6 @@ const Carousel = ({ data, contentComponent }) => {
                         setIsButtonDisabled(false)
                     }, TRANSITION_TIME * 1000)
 
-                }} />
-            <ChangeSlideButton
-                isRight={true}
-                disabled={isButtonDisabled}
-                onClick={() => {
-                    initiateSlideChange()
-
-                    setIsButtonDisabled(true)
-                    setTimeout(() => {
-                        setIsButtonDisabled(false)
-                    }, TRANSITION_TIME * 1000)
                 }} />
 
             <div className="carousel"
@@ -273,6 +261,17 @@ const Carousel = ({ data, contentComponent }) => {
                     <Content data={data[indexes[2].index]} />
                 </Slide>
             </div>
+            <ChangeSlideButton
+                isRight={true}
+                disabled={isButtonDisabled}
+                onClick={() => {
+                    initiateSlideChange()
+
+                    setIsButtonDisabled(true)
+                    setTimeout(() => {
+                        setIsButtonDisabled(false)
+                    }, TRANSITION_TIME * 1000)
+                }} />
             <SliderDot data={data} onChange={setSliderDotIndex}
                 currentSlideIndex={currentSlideIndex} />
         </div>
