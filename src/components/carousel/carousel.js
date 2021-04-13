@@ -10,6 +10,7 @@ const Carousel = ({ data, contentComponent }) => {
     const SHORT_TRANSITION_TIME = 0.1
     const MAX_SWIPE_TIME = 500
     const MAX_SHIFT = 100
+    const MIN_SHIFT = 15
     const PREV_SLIDE = -1
     const CURRENT_SLIDE = 0
     const NEXT_SLIDE = 1
@@ -153,22 +154,21 @@ const Carousel = ({ data, contentComponent }) => {
 
 
     useEffect(() => {
-        if (direction !== null && changeSlide === true) {
-            let newCurrentSlideIndex = defineNextIndex(direction, currentSlideIndex, data)
-            let newIndexes = getNewIndexes(newCurrentSlideIndex)
-            let newIndexesArray = getNewIndexesArray(indexes, newIndexes)
+        if (direction === null || changeSlide !== true) { return }
 
-            setCurrentSlideIndex(newCurrentSlideIndex)
-            if (sliderDotEqualCurrentSlide) {
-                setSliderDotIndex(newCurrentSlideIndex)
-                setSliderDotEqualCurrentSlide(false)
+        let newCurrentSlideIndex = defineNextIndex(direction, currentSlideIndex, data)
+        let newIndexes = getNewIndexes(newCurrentSlideIndex)
+        let newIndexesArray = getNewIndexesArray(indexes, newIndexes)
 
-            }
-            setIndexes(changeOrder(direction, newIndexesArray))
-            setDirection(null)
-            setChangeSlide(false)
+        setCurrentSlideIndex(newCurrentSlideIndex)
+        if (sliderDotEqualCurrentSlide) {
+            setSliderDotIndex(newCurrentSlideIndex)
+            setSliderDotEqualCurrentSlide(false)
         }
-
+        setIndexes(changeOrder(direction, newIndexesArray))
+        setDirection(null)
+        setChangeSlide(false)
+        
     }, [changeSlide])
 
     function handleTouchStart(e) {
@@ -197,7 +197,7 @@ const Carousel = ({ data, contentComponent }) => {
         if (direction === null) { return }
         let swipeTime = Date.now() - firstTouch.time
 
-        if ((Math.abs(shift) > MAX_SHIFT || swipeTime < MAX_SWIPE_TIME)) {
+        if ((Math.abs(shift) > MAX_SHIFT || (swipeTime < MAX_SWIPE_TIME && Math.abs(shift) > MIN_SHIFT))) {
 
             initiateSlideChange({ direction })
         }
@@ -263,14 +263,14 @@ const Carousel = ({ data, contentComponent }) => {
                 onTouchMove={touchMoveEvent => handleTouchMove(touchMoveEvent)}
                 onTouchEnd={() => handleTouchEnd()}>
 
-                <Slide style={classes[0].style} slideData={data[indexes[0].index]}>
-                    <Content />
+                <Slide style={classes[0].style} >
+                    <Content data={data[indexes[0].index]} />
                 </Slide>
-                <Slide style={classes[1].style} slideData={data[indexes[1].index]}>
-                    <Content />
+                <Slide style={classes[1].style} >
+                    <Content data={data[indexes[1].index]} />
                 </Slide>
-                <Slide style={classes[2].style} slideData={data[indexes[2].index]}>
-                    <Content />
+                <Slide style={classes[2].style} >
+                    <Content data={data[indexes[2].index]} />
                 </Slide>
             </div>
             <SliderDot data={data} onChange={setSliderDotIndex}

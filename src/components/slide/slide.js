@@ -2,11 +2,10 @@ import React from 'react'
 
 import './slide.css'
 
-const Slide = ({ style, slideData:data, children }) => {
-    // console.log(data)
+const Slide = ({ style, children }) => {
     return (
         <div className="slide" style={style} >
-            {React.cloneElement(children, { data: data })}
+            {children}
         </div>
     )
 }
