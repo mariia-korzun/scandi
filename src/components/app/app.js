@@ -14,7 +14,7 @@ export default class App extends Component {
     }
 
     componentDidMount() {
-        this.props.dataService.fetchCarouselData()
+        this.props.imageSevice.fetchCarouselData()
             .then(data => {
                 this.setState({
                     data,

@@ -5,26 +5,29 @@ import SliderDot from '../slider-dot'
 import './carousel.css'
 
 const Carousel = ({ data }) => {
-    let transition = 0.3
-    let shortTransition = 0.1
-    let maxSwipeTime = 500
-    let maxShift = 100
-    
+    let TRANSITION_TIME = 0.3//transition
+    let SHORT_TRANSITION_TIME = 0.1//shortTransition
+    let MAX_SWIPE_TIME = 500//maxSwipeTime
+    let MAX_SHIFT = 100//maxShift
+    let PREV_SLIDE = -1//prevSlide
+    let CURRENT_SLIDE = 0//currentSlide
+    let NEXT_SLIDE = 1//nextSlide
+
     const getNewStyles = (shift, time, direction, changeOpacity = false) => {
         const transition = time ? `left ${time}s linear` : 'none'
         return {
-            prevStyle: {
+            prev: {
                 left: `calc(-100% - ${shift}px)`,
                 transition: transition,
                 zIndex: direction ? 99 : '',
                 opacity: direction ? 1 : changeOpacity ? 1 : 0
             },
-            currentStyle: {
+            current: {
                 left: `${-1 * shift}px`,
                 transition: transition,
                 zIndex: 99
             },
-            nextStyle: {
+            next: {
                 left: `calc(100% + ${-shift}px)`,
                 transition: transition,
                 zIndex: direction ? '' : 99,
@@ -32,34 +35,48 @@ const Carousel = ({ data }) => {
             }
         }
     }
-    let initialStyles = getNewStyles(0, transition, true)
+
+    const getNewIndexes = (newCurrentSlideIndex) => {
+        return {
+            prev: defineNextIndex(false, newCurrentSlideIndex, data),
+            current: newCurrentSlideIndex,
+            next: defineNextIndex(true, newCurrentSlideIndex, data)
+        }
+    }
 
 
-    function getNewClasses(classes, styles) {
-        return classes.map(item => {
+    function getNewValuesArray(oldArray, values, dynamicKey) {
+        return oldArray.map(item => {
             switch (item.position) {
-                case -1: {
+                case PREV_SLIDE: {
                     return {
                         ...item,
-                        style: styles.prevStyle
+                        [dynamicKey]: values.prev
                     }
                 }
-                case 0: {
+                case CURRENT_SLIDE: {
                     return {
                         ...item,
-                        style: styles.currentStyle
+                        [dynamicKey]: values.current
                     }
                 }
-                case 1: {
+                case NEXT_SLIDE: {
                     return {
                         ...item,
-                        style: styles.nextStyle
+                        [dynamicKey]: values.next
                     }
                 }
             }
         })
     }
 
+    function getNewClassesArray(classes, styles) {
+        return getNewValuesArray(classes, styles, 'style')
+    }
+
+    function getNewIndexesArray(indexes, newIndexes) {
+        return getNewValuesArray(indexes, newIndexes, 'index')
+    }
 
     const [shift, setShift] = useState(0)
     const [firstTouch, setFirstTouch] = useState(null)
@@ -69,33 +86,39 @@ const Carousel = ({ data }) => {
     const [sliderDotIndex, setSliderDotIndex] = useState(0)
     const [sliderDotEqualCurrentSlide, setSliderDotEqualCurrentSlide] = useState(false)
     const [changeSlide, setChangeSlide] = useState(false)
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false)
 
-
+    let initialStyles = getNewStyles(0, TRANSITION_TIME, true)
     const [classes, setClasses] = useState([
         {
-            position: -1,//prev
-            style: initialStyles.prevStyle
+            position: PREV_SLIDE,//prev
+            style: initialStyles.prev
         },
         {
-            position: 0,//current
-            style: initialStyles.currentStyle
+            position: CURRENT_SLIDE,//current
+            style: initialStyles.current
         },
         {
-            position: 1,//next
-            style: initialStyles.nextStyle
+            position: NEXT_SLIDE,//next
+            style: initialStyles.next
         }
     ])
 
-    // const [indexes, setIndexes] = useState([
-    //     { prev: defineNextIndex(false, currentSlideIndex, data) },
-    //     { current: currentSlideIndex },
-    //     { next: defineNextIndex(true, currentSlideIndex, data) }
-    // ])
-
+    let initialIndexes = getNewIndexes(currentSlideIndex)
     const [indexes, setIndexes] = useState([
-        defineNextIndex(false, currentSlideIndex, data),
-        currentSlideIndex,
-        defineNextIndex(true, currentSlideIndex, data)
+        {
+            position: PREV_SLIDE,
+            index: initialIndexes.prev
+        },
+        {
+            position: CURRENT_SLIDE,
+            index: initialIndexes.current
+        },
+        {
+            position: NEXT_SLIDE,
+            index: initialIndexes.next
+
+        }
     ])
 
     const [direction, setDirection] = useState(null)
@@ -111,45 +134,32 @@ const Carousel = ({ data }) => {
     }
 
     useEffect(() => {
-        if (currentSlideIndex !== sliderDotIndex) {
-            let direction = (sliderDotIndex - currentSlideIndex) > 0
+        if (currentSlideIndex === sliderDotIndex) { return }
 
-            let newStyles = getNewStyles(0, shortTransition, direction)
-            let newClasses = getNewClasses(classes, newStyles)
-            setClasses(changeOrder(direction, newClasses))
-            setDirection(direction)
-            setTimeout(() => {
-                setChangeSlide(true)
-            }, shortTransition*1000)
-
-        }
+        let direction = (sliderDotIndex - currentSlideIndex) > 0
+        let newStyles = getNewStyles(0, SHORT_TRANSITION_TIME, direction)
+        let newClasses = getNewClassesArray(classes, newStyles)
+        setClasses(changeOrder(direction, newClasses))
+        setDirection(direction)
+        setTimeout(() => {
+            setChangeSlide(true)
+        }, SHORT_TRANSITION_TIME * 1000)
     }, [currentSlideIndex, sliderDotIndex])
 
 
     useEffect(() => {
         if (direction !== null && changeSlide === true) {
             let newCurrentSlideIndex = defineNextIndex(direction, currentSlideIndex, data)
-            let newIndexes = indexes.map((item) => {
-                switch (item) {
-                    case currentSlideIndex: {
-                        return newCurrentSlideIndex
-                    }
-                    case defineNextIndex(false, currentSlideIndex, data): {
-                        return defineNextIndex(false, newCurrentSlideIndex, data)
-                    }
-                    case defineNextIndex(true, currentSlideIndex, data): {
-                        return defineNextIndex(true, newCurrentSlideIndex, data)
-                    }
-                }
-            })
+            let newIndexes = getNewIndexes(newCurrentSlideIndex)
+            let newIndexesArray = getNewIndexesArray(indexes, newIndexes)
+
             setCurrentSlideIndex(newCurrentSlideIndex)
             if (sliderDotEqualCurrentSlide) {
                 setSliderDotIndex(newCurrentSlideIndex)
                 setSliderDotEqualCurrentSlide(false)
 
             }
-            //    let a = changeOrder(direction, newIndexes)
-            setIndexes(changeOrder(direction, newIndexes))
+            setIndexes(changeOrder(direction, newIndexesArray))
             setDirection(null)
             setChangeSlide(false)
         }
@@ -166,7 +176,7 @@ const Carousel = ({ data }) => {
         let newShift = firstTouch.x - e.touches[0].clientX
         let newDirection = newShift >= 0
         let newStyles = getNewStyles(newShift, null, newDirection, true)
-        let newClasses = getNewClasses(classes, newStyles)
+        let newClasses = getNewClassesArray(classes, newStyles)
         setClasses(newClasses)
         setDirection(newDirection)
         setShift(newShift)
@@ -176,19 +186,17 @@ const Carousel = ({ data }) => {
         if (direction === null) { return }
         let swipeTime = Date.now() - firstTouch.time
 
-
-
-        if ((Math.abs(shift) > maxShift || swipeTime < maxSwipeTime)) {
-            let newStyles = getNewStyles(0, transition, direction)
-            let newClasses = getNewClasses(classes, newStyles)
+        if ((Math.abs(shift) > MAX_SHIFT || swipeTime < MAX_SWIPE_TIME)) {
+            let newStyles = getNewStyles(0, TRANSITION_TIME, direction)
+            let newClasses = getNewClassesArray(classes, newStyles)
             setDirection(direction)
             setSliderDotEqualCurrentSlide(true)
             setClasses(changeOrder(direction, newClasses))
             setChangeSlide(true)
         }
         else {
-            let newStyles = getNewStyles(0, transition, direction, true)
-            let newClasses = getNewClasses(classes, newStyles)
+            let newStyles = getNewStyles(0, TRANSITION_TIME, direction, true)
+            let newClasses = getNewClassesArray(classes, newStyles)
             setClasses(newClasses)
         }
 
@@ -200,24 +208,34 @@ const Carousel = ({ data }) => {
         <div>
             <ChangeSlideButton
                 text='Prev'
+                disabled={isButtonDisabled}
                 onClick={() => {
                     setDirection(false)
-                    let newStyles = getNewStyles(0, transition, false)
-                    let newClasses = getNewClasses(classes, newStyles)
+                    let newStyles = getNewStyles(0, TRANSITION_TIME, false)
+                    let newClasses = getNewClassesArray(classes, newStyles)
                     setSliderDotEqualCurrentSlide(true)
                     setClasses(changeOrder(false, newClasses))
+                    setIsButtonDisabled(true)
                     setChangeSlide(true)
+                    setTimeout(() => {
+                        setIsButtonDisabled(false)
+                    }, TRANSITION_TIME * 1000)
 
                 }} />
             <ChangeSlideButton
                 text='Next'
+                disabled={isButtonDisabled}
                 onClick={() => {
                     setDirection(true)
-                    let newStyles = getNewStyles(0, transition, true)
-                    let newClasses = getNewClasses(classes, newStyles)
+                    let newStyles = getNewStyles(0, TRANSITION_TIME, true)
+                    let newClasses = getNewClassesArray(classes, newStyles)
                     setSliderDotEqualCurrentSlide(true)
                     setClasses(changeOrder(true, newClasses))
+                    setIsButtonDisabled(true)
                     setChangeSlide(true)
+                    setTimeout(() => {
+                        setIsButtonDisabled(false)
+                    }, TRANSITION_TIME * 1000)
                 }} />
 
             <div className="carousel-container"
@@ -226,13 +244,13 @@ const Carousel = ({ data }) => {
                 onTouchEnd={() => handleTouchEnd()}>
 
                 <div className={`slide`} style={classes[0].style} >
-                    <img src={data[indexes[0]].imgURL} className="slide-img" />
+                    <img src={data[indexes[0].index].imgURL} className="slide-img" />
                 </div>
                 <div className={`slide`} style={classes[1].style} >
-                    <img src={data[indexes[1]].imgURL} className="slide-img" />
+                    <img src={data[indexes[1].index].imgURL} className="slide-img" />
                 </div>
                 <div className={`slide`} style={classes[2].style} >
-                    <img src={data[indexes[2]].imgURL} className="slide-img" />
+                    <img src={data[indexes[2].index].imgURL} className="slide-img" />
                 </div>
             </div>
             <SliderDot data={data} onChange={setSliderDotIndex} sliderDotIndex={sliderDotIndex} />

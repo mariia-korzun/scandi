@@ -2,9 +2,9 @@ import React from 'react'
 
 import './change-slide-button.css'
 
-const ChangeSlideButton = ({ onClick, text }) => {
+const ChangeSlideButton = ({ onClick, text, disabled }) => {
     return (
-        <button className="change-slide-button"
+        <button disabled={disabled} className="change-slide-button"
         onClick={onClick}>{text}</button>
     )
 }
