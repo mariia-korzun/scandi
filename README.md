@@ -6,6 +6,21 @@ _____________________________________
 See application at [demo](https://mariia-korzun.github.io/)
 _____________________________________
 
+# Clone repository
+### `$ git clone https://github.com/mariia-korzun/mariia-korzun.github.io`
+_____________________________________
+
+# Available Scripts
+
+### `npm start`
+
+Starts the development server.
+
+### `npm run build`
+
+Bundles the app into static files for production.
+_____________________________________
+
 # Summary
 Created Carousel component provide the following features
 
