@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const path = require('path')
 
 module.exports = (env, argv) => {
 
@@ -14,7 +15,7 @@ module.exports = (env, argv) => {
 
     return {
         output: {
-            path: __dirname,
+            path: path.resolve(__dirname,'docs'), 
             filename: 'index.js',
         },
         devtool: 'source-map',
