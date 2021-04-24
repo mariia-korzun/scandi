@@ -1,6 +1,5 @@
 export default class ImageService {
     delay = 700
-
     data = [
         {
             id: 1,

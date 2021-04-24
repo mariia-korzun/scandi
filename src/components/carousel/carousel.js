@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-
 import Slide from '../slide'
 import ChangeSlideButton from '../change-slide-button'
 import SliderDot from '../slider-dot'
@@ -46,7 +45,6 @@ const Carousel = ({ data, contentComponent: Content }) => {
         }
     }
 
-
     function getNewValuesArray(oldArray, values, dynamicKey) {
         return oldArray.map(item => {
             switch (item.position) {
@@ -81,9 +79,7 @@ const Carousel = ({ data, contentComponent: Content }) => {
     }
 
     const [shift, setShift] = useState(0)
-    const [firstTouch, setFirstTouch] = useState(null)
-
-
+    const [gestureStart, setGestureStart] = useState(null)
     const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
     const [sliderDotIndex, setSliderDotIndex] = useState(0)
     const [sliderDotEqualCurrentSlide, setSliderDotEqualCurrentSlide] = useState(false)
@@ -125,7 +121,6 @@ const Carousel = ({ data, contentComponent: Content }) => {
 
     const [direction, setDirection] = useState(null)
 
-
     function changeOrder(direction, array) {
         if (direction === null) { return array }
         return direction ? [array[array.length - 1], ...array.slice(0, array.length - 1)] : [...array.slice(1), array[0]]
@@ -152,7 +147,6 @@ const Carousel = ({ data, contentComponent: Content }) => {
         }, SHORT_TRANSITION_TIME * 1000)
     }, [currentSlideIndex, sliderDotIndex])
 
-
     useEffect(() => {
         if (direction === null || changeSlide !== true) { return }
 
@@ -171,15 +165,17 @@ const Carousel = ({ data, contentComponent: Content }) => {
 
     }, [changeSlide])
 
-    function handleTouchStart(e) {
-        setFirstTouch({
-            x: e.touches[0].clientX,
+    function handleGestureStart(e, isTouch) {
+        setGestureStart({
+            x: (isTouch ? e.touches[0].clientX : e.clientX),
             time: Date.now()
         })
     }
-    function handleTouchMove(e) {
 
-        let newShift = firstTouch.x - e.touches[0].clientX
+    function handleGestureMove(e, isTouch) {
+        if (!gestureStart) { return }
+
+        let newShift = gestureStart.x - (isTouch ? e.touches[0].clientX : e.clientX)
         let newDirection = newShift >= 0
 
         initiateSlideChange({
@@ -193,17 +189,14 @@ const Carousel = ({ data, contentComponent: Content }) => {
         })
         setShift(newShift)
     }
-    function handleTouchEnd() {
-        if (direction === null) { return }
-        let swipeTime = Date.now() - firstTouch.time
+    function handleGestureEnd() {
+        let swipeTime = Date.now() - gestureStart.time
 
         if ((Math.abs(shift) > MAX_SHIFT || (swipeTime < MAX_SWIPE_TIME && Math.abs(shift) > MIN_SHIFT))) {
 
             initiateSlideChange({ direction })
-        }
-        else {
+        }else {
             initiateSlideChange({
-                changeDirection: false,
                 direction,
                 changeOpacity: true,
                 isChangeOrder: false,
@@ -211,17 +204,17 @@ const Carousel = ({ data, contentComponent: Content }) => {
                 changeSlide: false
             })
         }
-
+        setGestureStart(null)
+        setShift(null)
     }
 
 
-    function initiateSlideChange({ changeDirection = true, direction = true,
+    function initiateSlideChange({ direction = true,
         shift = 0, updateDots = true, isChangeOrder = true, changeSlide = true,
         transition = TRANSITION_TIME, changeOpacity = false } = {}) {
 
-        if (changeDirection) {
-            setDirection(direction)
-        }
+        setDirection(direction)
+        
         let newStyles = getNewStyles(shift, transition, direction, changeOpacity)
         let newClasses = getNewClassesArray(classes, newStyles)
         setClasses(isChangeOrder ? changeOrder(direction, newClasses) : newClasses)
@@ -247,9 +240,12 @@ const Carousel = ({ data, contentComponent: Content }) => {
                 }} />
 
             <div className="carousel"
-                onTouchStart={touchStartEvent => handleTouchStart(touchStartEvent)}
-                onTouchMove={touchMoveEvent => handleTouchMove(touchMoveEvent)}
-                onTouchEnd={() => handleTouchEnd()}>
+                onTouchStart={e => handleGestureStart(e, true)}
+                onMouseDown={e => handleGestureStart(e, false)}
+                onTouchMove={e => handleGestureMove(e, true)}
+                onMouseMove={e => handleGestureMove(e, false)}
+                onTouchEnd={handleGestureEnd}
+                onMouseUp={handleGestureEnd} >
 
                 <Slide style={classes[0].style} >
                     <Content data={data[indexes[0].index]} />

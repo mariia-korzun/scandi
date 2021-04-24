@@ -5,6 +5,6 @@ import SwapiService from '../../services/swapi-service'
 
 const swapiService = new SwapiService()
 
- const StarWarCarousel =  withData(swapiService.getPeople)(Carousel, PersonComponent)
+const StarWarCarousel =  withData(swapiService.getPeople)(Carousel, PersonComponent)
 
- export default StarWarCarousel
+export default StarWarCarousel

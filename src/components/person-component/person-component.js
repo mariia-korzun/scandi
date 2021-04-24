@@ -1,5 +1,4 @@
 import React from 'react'
-
 import './person-component.css'
 
 const PersonComponent = ({ data }) => {

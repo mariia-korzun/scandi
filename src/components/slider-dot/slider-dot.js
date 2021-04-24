@@ -1,5 +1,4 @@
 import React from 'react'
-
 import './slider-dot.css'
 
 const SliderDot = ({ data, onChange, currentSlideIndex }) => {

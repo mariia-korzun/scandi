@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import LoadingIndicator from '../loading-indicator'
 
-
 const withData = (fetch) => (Wrapped, contentComponent) => {
     return class extends Component {
         constructor() {
@@ -11,7 +10,7 @@ const withData = (fetch) => (Wrapped, contentComponent) => {
                 loading: true
             }
         }
-
+        
         componentDidMount() {
             fetch()
                 .then(data => {
