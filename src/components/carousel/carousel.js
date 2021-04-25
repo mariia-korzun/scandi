@@ -4,9 +4,11 @@ import ChangeSlideButton from '../change-slide-button'
 import SliderDot from '../slider-dot'
 import './carousel.css'
 
-const Carousel = ({ data, contentComponent: Content }) => {
-    const TRANSITION_TIME = 0.3
-    const SHORT_TRANSITION_TIME = 0.1
+const Carousel = ({ fetchedData, contentComponent: Content, arrayOfElements }) => {
+    let data = fetchedData ? fetchedData : arrayOfElements
+
+    const TRANSITION_TIME = 0.4
+    const SHORT_TRANSITION_TIME = 0.2
     const MAX_SWIPE_TIME = 500
     const MAX_SHIFT = 100
     const MIN_SHIFT = 15
@@ -177,7 +179,6 @@ const Carousel = ({ data, contentComponent: Content }) => {
 
         let newShift = gestureStart.x - (isTouch ? e.touches[0].clientX : e.clientX)
         let newDirection = newShift >= 0
-
         initiateSlideChange({
             direction: newDirection,
             shift: newShift,
@@ -190,12 +191,13 @@ const Carousel = ({ data, contentComponent: Content }) => {
         setShift(newShift)
     }
     function handleGestureEnd() {
+        if (!gestureStart) { return }
         let swipeTime = Date.now() - gestureStart.time
 
         if ((Math.abs(shift) > MAX_SHIFT || (swipeTime < MAX_SWIPE_TIME && Math.abs(shift) > MIN_SHIFT))) {
 
             initiateSlideChange({ direction })
-        }else {
+        } else {
             initiateSlideChange({
                 direction,
                 changeOpacity: true,
@@ -214,7 +216,7 @@ const Carousel = ({ data, contentComponent: Content }) => {
         transition = TRANSITION_TIME, changeOpacity = false } = {}) {
 
         setDirection(direction)
-        
+
         let newStyles = getNewStyles(shift, transition, direction, changeOpacity)
         let newClasses = getNewClassesArray(classes, newStyles)
         setClasses(isChangeOrder ? changeOrder(direction, newClasses) : newClasses)
@@ -224,6 +226,15 @@ const Carousel = ({ data, contentComponent: Content }) => {
         setChangeSlide(changeSlide)
     }
 
+    let array = []
+    for (let i = 0; i <= 2; i++) {
+        array.push(
+            <Slide style={classes[i].style} key={i}>
+                {fetchedData ? <Content data={data[indexes[i].index]} /> : data[indexes[i].index]}
+            </Slide>
+        )
+    }
+
     return (
         <div className="carousel-container">
             <ChangeSlideButton
@@ -231,12 +242,10 @@ const Carousel = ({ data, contentComponent: Content }) => {
                 disabled={isButtonDisabled}
                 onClick={() => {
                     initiateSlideChange({ direction: false })
-
                     setIsButtonDisabled(true)
                     setTimeout(() => {
                         setIsButtonDisabled(false)
                     }, TRANSITION_TIME * 1000)
-
                 }} />
 
             <div className="carousel"
@@ -245,24 +254,15 @@ const Carousel = ({ data, contentComponent: Content }) => {
                 onTouchMove={e => handleGestureMove(e, true)}
                 onMouseMove={e => handleGestureMove(e, false)}
                 onTouchEnd={handleGestureEnd}
-                onMouseUp={handleGestureEnd} >
-
-                <Slide style={classes[0].style} >
-                    <Content data={data[indexes[0].index]} />
-                </Slide>
-                <Slide style={classes[1].style} >
-                    <Content data={data[indexes[1].index]} />
-                </Slide>
-                <Slide style={classes[2].style} >
-                    <Content data={data[indexes[2].index]} />
-                </Slide>
+                onMouseUp={handleGestureEnd}
+                onMouseLeave={handleGestureEnd} >
+                {array}
             </div>
             <ChangeSlideButton
                 isRight={true}
                 disabled={isButtonDisabled}
                 onClick={() => {
                     initiateSlideChange()
-
                     setIsButtonDisabled(true)
                     setTimeout(() => {
                         setIsButtonDisabled(false)

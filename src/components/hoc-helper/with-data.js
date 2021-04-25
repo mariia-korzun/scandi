@@ -24,7 +24,7 @@ const withData = (fetch) => (Wrapped, contentComponent) => {
         render() {
             const { loading, data } = this.state
             if (loading) { return (<LoadingIndicator />) }
-            return <Wrapped data={data} contentComponent={contentComponent} />
+            return <Wrapped fetchedData={data} contentComponent={contentComponent} />
         }
     }
 }

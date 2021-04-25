@@ -3,7 +3,6 @@ import './change-slide-button.css'
 import left from '../../../public/images/left-arrow-icon.svg'
 import right from '../../../public/images/right-arrow-icon.svg'
 
-
 const ChangeSlideButton = ({ onClick, isRight, disabled }) => {
     const img = isRight ? right : left
     const width = 35

@@ -9,13 +9,21 @@ module.exports = (env, argv) => {
     const getStyleLoaders = () => {
         return [
             isProd ? MiniCssExtractPlugin.loader : 'style-loader',
-            'css-loader'
+            'css-loader', {
+                loader: "postcss-loader",
+                options: {
+                    postcssOptions: {
+                        plugins: [
+                            "autoprefixer"
+                        ]
+                    }
+                }
+            }
         ]
     }
-
     return {
         output: {
-            path: path.resolve(__dirname,'docs'), 
+            path: path.resolve(__dirname, 'docs'),
             filename: 'index.js',
         },
         devtool: 'source-map',
@@ -37,7 +45,7 @@ module.exports = (env, argv) => {
                     use: getStyleLoaders()
                 },
                 {
-                    test: /\.(png|jpg|jpeg|gif|ico')$/,
+                    test: /\.(png|jpg|jpeg|gif|ico)$/,
                     use: [{
                         loader: 'file-loader',
                         options: {
@@ -57,6 +65,17 @@ module.exports = (env, argv) => {
                             },
                         },
                     ]
+                },
+                {
+                    test: /\.(mov|mp4)$/,
+                    use: [{
+                        loader: 'file-loader',
+                        options: {
+                            outputPath: 'video',
+                            name: '[name]-[sha1:hash:7].[ext]'
+                        }
+
+                    }]
                 }
             ]
         },
