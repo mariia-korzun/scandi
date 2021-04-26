@@ -38,11 +38,16 @@ considered as advantages:
 performance optimizations:
 - Carousel component always uses only 3 div elements (slides) to prevent situations of lots div elements on page. Used divs synchronously change their positions and display corresponding data. 
 
-For clear demonstration of work with any HTML content was configured and mounted two Carousel components:
+Carousel component capable to accept either component which elements will be displayed in carousel (one type of slides per carousel) or array of React elements (opportunity having multiple types of slides per carousel)
+
+For a clear demonstration of work with any HTML content was configured and mounted three Carousel components:
 
 - ImageCarousel - carousel component configured with images content component using simulated API - Image Service.
 - StarWarCarousel - carousel component configured with Star Wars character component using real API - Swapi Service.
 
-Both components created by high-order-component withData which returns component with common loading data logic and a carousel with a specified content component.
+    Both components created by high-order-component withData which returns component with common loading data logic and a carousel with a specified content component.
 
-Project was built by Webapck with manual configuration.
+- Carousel with an array of React elements passed as props - carousel component display received elements.
+
+
+The project was built by Webapck with manual configuration.
