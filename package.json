@@ -27,13 +27,20 @@
     "@babel/preset-env": "^7.13.15",
     "@babel/preset-react": "^7.13.13",
     "autoprefixer": "^10.2.5",
+    "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.2",
     "css-loader": "^5.2.1",
+    "eslint": "^7.25.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-babel": "^5.3.1",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-react": "^7.23.2",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.3.1",
     "mini-css-extract-plugin": "^1.4.1",
     "postcss": "^8.2.12",
     "postcss-loader": "^5.2.0",
+    "prettier": "^2.2.1",
     "style-loader": "^2.0.0",
     "svg-url-loader": "^7.1.1",
     "webpack": "^5.31.2",
@@ -42,6 +49,7 @@
   },
   "dependencies": {
     "core-js": "^3.10.1",
+    "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   }

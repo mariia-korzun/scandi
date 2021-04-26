@@ -1,3 +1,3 @@
-import PersonComponent from './person-component'
+import PersonComponent from "./person-component";
 
-export default PersonComponent
+export default PersonComponent;

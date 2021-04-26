@@ -1,3 +1,3 @@
-import ImageComponent from './image-component'
+import ImageComponent from "./image-component";
 
-export default ImageComponent
+export default ImageComponent;

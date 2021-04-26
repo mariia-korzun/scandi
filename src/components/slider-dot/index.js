@@ -1,3 +1,3 @@
-import SliderDot from './slider-dot'
+import SliderDot from "./slider-dot";
 
-export default SliderDot
+export default SliderDot;

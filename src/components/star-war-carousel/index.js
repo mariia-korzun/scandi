@@ -1,3 +1,3 @@
-import StarWarCarousel from './star-war-carousel'
+import StarWarCarousel from "./star-war-carousel";
 
-export default StarWarCarousel
+export default StarWarCarousel;

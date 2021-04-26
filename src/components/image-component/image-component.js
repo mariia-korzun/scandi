@@ -1,10 +1,15 @@
-import React from 'react'
-import './image-component.css'
+import React from "react";
+import PropTypes from "prop-types";
+import "./image-component.css";
 
-const ImageComponent = ({data}) => {
-    return (
-        <img src={data.imgURL} className="slide-img"/>
-    )
-}
+const ImageComponent = ({ data }) => {
+  return <img src={data.imgURL} className="slide-img" />;
+};
 
-export default ImageComponent
+ImageComponent.propTypes = {
+  data: PropTypes.shape({
+    imgURL: PropTypes.string,
+  }),
+};
+
+export default ImageComponent;

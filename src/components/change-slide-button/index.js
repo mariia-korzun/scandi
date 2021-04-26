@@ -1,3 +1,3 @@
-import ChangeSlideButton from './change-slide-button'
+import ChangeSlideButton from "./change-slide-button";
 
-export default ChangeSlideButton
+export default ChangeSlideButton;
