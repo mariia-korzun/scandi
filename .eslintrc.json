@@ -15,9 +15,10 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "parser":"babel-eslint",
+  "parser": "babel-eslint",
   "plugins": ["react", "babel"],
   "rules": {
     "react/display-name": "off"
-  }
+  },
+  "ignorePattern": "webpack.config.js"
 }
