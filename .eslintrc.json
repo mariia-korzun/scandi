@@ -8,6 +8,7 @@
     "plugin:react/recommended",
     "plugin:prettier/recommended"
   ],
+  "parser": "@babel/eslint-parser",
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
@@ -15,10 +16,8 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "parser": "babel-eslint",
-  "plugins": ["react", "babel"],
+  "plugins": ["react", "@babel"],
   "rules": {
     "react/display-name": "off"
-  },
-  "ignorePattern": "webpack.config.js"
+  }
 }
