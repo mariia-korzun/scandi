@@ -7,7 +7,7 @@ See application at [demo](https://mariia-korzun.github.io/scandi/)
 _____________________________________
 
 # Clone repository
-### `$ git clone https://github.com/mariia-korzun/mariia-korzun.github.io`
+### `$ git clone git@github.com:mariia-korzun/scandi.git`
 _____________________________________
 
 # Available Scripts
