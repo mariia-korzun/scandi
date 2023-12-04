@@ -3,7 +3,7 @@ Test assignment for Scandiweb
 _____________________________________
 
 # Demo
-See application at [demo](https://mariia-korzun.github.io/)
+See application at [demo](https://mariia-korzun.github.io/scandi/)
 _____________________________________
 
 # Clone repository
